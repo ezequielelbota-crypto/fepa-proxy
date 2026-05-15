@@ -71,14 +71,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Proxy todo lo que empiece con /api/ hacia Contabilium
-  if (path.startsWith('/api/')) {
-    const ctbPath = path.replace('/api/', '/') + (parsed.search || '');
-    proxyRequest(req, res, ctbPath);
-    return;
+  // Proxy todo hacia Contabilium — acepta /api/clientes, /clientes, etc.
+  // FEPA manda: /api/clientes?api_key=XXX&page=1
+  // Contabilium espera: /clientes?api_key=XXX&page=1
+  let ctbPath = path;
+  if (ctbPath.startsWith('/api')) {
+    ctbPath = ctbPath.replace(/^\/api/, '') || '/';
   }
-
-  sendJSON(res, 404, { error: 'Not found' });
+  // Agregar query string
+  ctbPath = ctbPath + (parsed.search || '');
+  proxyRequest(req, res, ctbPath);
 });
 
 server.listen(PORT, () => {
