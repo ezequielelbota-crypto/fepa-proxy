@@ -1,0 +1,13 @@
+{
+  "name": "fepa-proxy",
+  "version": "1.0.0",
+  "description": "Proxy CORS para conectar FEPA con la API de Contabilium",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
